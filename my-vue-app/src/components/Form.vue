@@ -63,19 +63,19 @@ const clearForm = () => {
             </div>
             <div class="col-sm-6">
               <label for="password" class="form-label">Password:</label>
-              <input type="password" class="form-control" id="password" v-model="formData.password" required>
+              <input type="password" class="form-control" id="password" v-model="formData.password" minlength = "4" maxlength="10">
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-sm-6">
               <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="isAustralian" v-model="formData.isAustralian">
+                <input type="checkbox" class="form-check-input" id="isAustralian" required v-model="formData.isAustralian">
                 <label class="form-check-label" for="isAustralian">Australian Resident?</label>
               </div>
             </div>
             <div class="col-sm-6">
               <label for="gender" class="form-label">Gender</label>
-              <select class="form-select" id="gender" v-model="formData.gender">
+              <select class="form-select" id="gender" required v-model="formData.gender">
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
@@ -84,7 +84,7 @@ const clearForm = () => {
           </div>
           <div class="row mb-3">
             <label for="reason" class="form-label">Reason For Joining:</label>
-            <textarea class="form-control" id="reason" rows="3" v-model="formData.reason"></textarea>
+            <textarea class="form-control" id="reason" rows="3" required v-model="formData.reason"></textarea>
           </div>
           <div class="text-center">
             <button type="submit" class="btn btn-primary me-2">Submit</button>
