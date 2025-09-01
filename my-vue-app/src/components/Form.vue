@@ -42,6 +42,10 @@ const errors = ref({
   confirmPassword: null
 })
 
+const tips = ref({
+  reason: null
+})
+
 const validateName = (blur) => {
   if (formData.value.username.length < 3) {
     if (blur) errors.value.username = 'Name must be at least 3 characters'
@@ -81,6 +85,15 @@ const validateConfirmPassword = (blur) => {
   } else {
     errors.value.confirmPassword = null
     console.log('Confirm passwords do not match.')
+  }
+}
+
+const vlidateReason = (blur) => {
+  console.log('Validating vlidate reason')
+  if (formData.value.reason.toLowerCase().includes('friend')) {
+    tips.value.reason = 'Great to have a friend'
+  } else {
+    tips.value.reason = null
   }
 }
 </script>
@@ -162,7 +175,9 @@ const validateConfirmPassword = (blur) => {
               id="reason"
               rows="3"
               v-model="formData.reason"
+              @input="() => vlidateReason(false)"
             ></textarea>
+            <div v-if="tips.reason" style="color: #42b883">{{ tips.reason }}</div>
           </div>
           <div class="text-center">
             <button type="submit" class="btn btn-primary me-2">Submit</button>
