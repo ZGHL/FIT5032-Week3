@@ -2,7 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 import LoginView from '../views/LoginView.vue'
+import FireLogin from '../views/FirebaseSigninView.vue'
+import FireRegister from '../views/FirebaseRegisterView.vue'
+import ProfileView from '../views/ProfileView.vue'
 import { isAuthenticated } from '../auth.js'
+import { getAuth } from "firebase/auth";
 const routes = [
   {
     path: '/',
@@ -18,6 +22,21 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: LoginView
+  },
+  {
+    path: '/FireLogin',
+    name: 'FireLogin',
+    component: FireLogin
+  },
+  {
+    path: '/FireRegister',
+    name: 'FireRegister',
+    component: FireRegister
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: ProfileView
   }
 ]
 
@@ -26,13 +45,13 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-    if (to.name !== 'Login' && !isAuthenticated.value) {
-      alert('You must be logged in to access this page.')
-        next({ name: 'Login' })
-    } else {
-        next()
-    }
-});
+// router.beforeEach((to, from, next) => {
+//     if (to.name !== 'FirebaseLogin' && !getAuth().currentUser === null) {
+//       alert('You must be logged in to access this page.')
+//         next({ name: 'FirebaseLogin' })
+//     } else {
+//         next()
+//     }
+// });
 
 export default router
