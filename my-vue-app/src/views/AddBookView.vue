@@ -9,6 +9,7 @@ export default {
   setup() {
     const isbn = ref('');
     const name = ref('');
+    const bookListRef = ref();
 
     const addBook = async () => {
       try {
@@ -24,15 +25,37 @@ export default {
         });
         console.log("Document written with ID: ", name.value);
         alert("Book added successfully!");
+        
         // Clear input fields after successful addition
         isbn.value = '';
         name.value = '';
+        
+        // Refresh the book list
+        if (bookListRef.value) {
+          bookListRef.value.fetchBooks();
+        }
       } catch (e) {
         console.error("Error adding document: ", e);
         alert("Error adding book: " + e.message);
       }
     };
-    return {isbn, name, addBook};
+
+    const handleBookUpdated = () => {
+      console.log("Book updated successfully");
+    };
+
+    const handleBookDeleted = () => {
+      console.log("Book deleted successfully");
+    };
+
+    return {
+      isbn, 
+      name, 
+      addBook, 
+      bookListRef,
+      handleBookUpdated,
+      handleBookDeleted
+    };
   },
   components: {
     BkList
@@ -41,30 +64,40 @@ export default {
 </script>
 
 <template>
-  <div class="container">
-    <h1>Add Book</h1>
-    <form @submit.prevent="addBook">
-      <div>
-        <label for="ISBN">ISBN:</label>
-        <input type="text" id="ISBN" v-model="isbn" required />
+  <div class="main-container">
+    <h1>Book Management</h1>
+    <div class="content-wrapper">
+      <!-- Left side - Add Book Form -->
+      <div class="left-panel">
+        <div class="form-container">
+          <h2>Add New Book</h2>
+          <form @submit.prevent="addBook">
+            <div class="form-group">
+              <label for="ISBN">ISBN:</label>
+              <input type="text" id="ISBN" v-model="isbn" placeholder="Enter ISBN number" required />
+            </div>
+            <div class="form-group">
+              <label for="name">Book Name:</label>
+              <input type="text" id="name" v-model="name" placeholder="Enter book name" required />
+            </div>
+            <button type="submit" class="submit-btn">Add Book</button>
+          </form>
+        </div>
       </div>
-      <div>
-        <label for="name">Name:</label>
-        <input type="text" id="name" v-model="name" required />
+      
+      <!-- Right side - Book List -->
+      <div class="right-panel">
+        <BkList ref="bookListRef" @bookUpdated="handleBookUpdated" @bookDeleted="handleBookDeleted" />
       </div>
-      <button type="submit">Add Book</button>
-    </form>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.container {
-  max-width: 500px;
+.main-container {
+  max-width: 1200px;
   margin: 2rem auto;
-  padding: 2rem;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0 1rem;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
@@ -72,7 +105,35 @@ h1 {
   text-align: center;
   color: #333;
   margin-bottom: 2rem;
-  font-size: 1.8rem;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  min-height: 600px;
+}
+
+.left-panel {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+.right-panel {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+.form-container h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 600;
 }
 
@@ -82,7 +143,7 @@ form {
   gap: 1.5rem;
 }
 
-form > div {
+.form-group {
   display: flex;
   flex-direction: column;
 }
@@ -109,7 +170,7 @@ input:focus {
   box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.1);
 }
 
-button {
+.submit-btn {
   padding: 12px 16px;
   background: #4285f4;
   color: white;
@@ -122,19 +183,35 @@ button {
   margin-top: 0.5rem;
 }
 
-button:hover {
+.submit-btn:hover {
   background: #3367d6;
   transform: translateY(-1px);
 }
 
-button:active {
+.submit-btn:active {
   background: #2d5aa0;
   transform: translateY(0);
 }
 
-button:disabled {
+.submit-btn:disabled {
   background: #ccc;
   cursor: not-allowed;
   transform: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .content-wrapper {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .main-container {
+    padding: 0 0.5rem;
+  }
+  
+  .left-panel, .right-panel {
+    padding: 1.5rem;
+  }
 }
 </style>
