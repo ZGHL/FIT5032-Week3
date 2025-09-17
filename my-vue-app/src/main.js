@@ -26,9 +26,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firestore
-export const db = getFirestore(app);
-
 const vueApp = createApp(App)
 vueApp.use(PrimeVue, { theme: { preset: Aura } })
 vueApp.use(router)

@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { getAuth, signOut } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from '../main.js';
+import db from '../firebase/init.js';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();

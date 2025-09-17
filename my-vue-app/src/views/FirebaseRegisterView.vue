@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { db } from '../main.js';
+import db from '../firebase/init.js';
 import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
