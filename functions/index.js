@@ -71,6 +71,30 @@ exports.addBook = onRequest((req, res) => {
     });
 });
 
+exports.getAllBooks = onRequest((req, res) => {
+  cors(req, res, async () => {
+    try {
+      const snapshot = await admin.firestore().collection('books').get();
+      const books = [];
+      
+      snapshot.forEach((doc) => {
+        books.push({
+          id: doc.id,
+          ...doc.data()
+        });
+      });
+      
+      res.status(200).send({
+        count: books.length,
+        books: books
+      });
+    } catch (error) {
+      logger.error("Error getting all books:", error);
+      res.status(500).send({ error: "Internal Server Error" });
+    }
+  });
+});
+
 
 // For cost control, you can set the maximum number of containers that can be
 // running at the same time. This helps mitigate the impact of unexpected
