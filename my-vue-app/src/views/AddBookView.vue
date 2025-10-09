@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import db from '../firebase/init'
 import { collection, addDoc } from 'firebase/firestore'
+import axios from "axios";
 
 import BkList from '@/components/BookList.vue'
 
@@ -13,30 +14,57 @@ export default {
 
     const addBook = async () => {
       try {
+        // Frontend validation
+        if (!isbn.value.trim() || !name.value.trim()) {
+          alert("Please fill in all required fields");
+          return;
+        }
+
         const isbnNumber = Number(isbn.value);
         if (isNaN(isbnNumber)) {
           alert("ISBN must be a number");
           return;
         }
 
-        await addDoc(collection(db, "books"), {
-          ISBN: isbn.value,
-          name: name.value,
+        // Call cloud function to add book
+        const response = await axios.post('https://addbook-3e2mknb2qq-uc.a.run.app', {
+          isbn: isbn.value,
+          name: name.value
         });
-        console.log("Document written with ID: ", name.value);
-        alert("Book added successfully!");
+
+        console.log("Response from server: ", response.data);
         
-        // Clear input fields after successful addition
-        isbn.value = '';
-        name.value = '';
-        
-        // Refresh the book list
-        if (bookListRef.value) {
-          bookListRef.value.fetchBooks();
+        // Check response status
+        if (response.data.success) {
+          alert(response.data.message || "Book added successfully!");
+          
+          // Clear input fields after successful addition
+          isbn.value = '';
+          name.value = '';
+          
+          // Refresh the book list
+          if (bookListRef.value) {
+            bookListRef.value.fetchBooks();
+          }
+        } else {
+          alert("Failed to add book: " + (response.data.error || "Unknown error"));
         }
-      } catch (e) {
-        console.error("Error adding document: ", e);
-        alert("Error adding book: " + e.message);
+
+      } catch (error) {
+        console.error("Error adding book: ", error);
+        
+        // Handle different types of errors
+        if (error.response) {
+          // Server returned an error status code
+          const errorMessage = error.response.data?.error || error.response.data?.message || "Server error";
+          alert("Failed to add book: " + errorMessage);
+        } else if (error.request) {
+          // Request was sent but no response received
+          alert("Network error: Unable to connect to server");
+        } else {
+          // Other errors
+          alert("Failed to add book: " + error.message);
+        }
       }
     };
 

@@ -1,0 +1,14 @@
+// Firestore安全规则 - 复制到Firebase Console的Rules页面
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 用户只能访问自己的文档
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+     match /books/{bookId} {
+      allow read, write;
+    }
+  }
+}
