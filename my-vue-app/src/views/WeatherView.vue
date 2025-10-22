@@ -32,7 +32,7 @@
       //Get the current weather icon using the API link
       iconUrl() {
         return this.weatherData
-            ? `http://api.openweathermap.org/img/w/${this.weatherData.weather[0].icon}.png`
+            ? `https://api.openweathermap.org/img/w/${this.weatherData.weather[0].icon}.png`
             : null;
       },
     },
@@ -75,7 +75,7 @@
         
         try {
           // API URL for searching weather by city name with metric units for Celsius
-          const url = `http://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${apikey}&units=metric`;
+          const url = `https://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${apikey}&units=metric`;
           await this.fetchWeatherData(url);
         } catch (error) {
           console.error("Error searching weather by city:", error);
