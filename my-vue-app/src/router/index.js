@@ -11,6 +11,7 @@ import GetWeather from "../views/WeatherView.vue";
 import CountBookAPI from "@/views/CountBookAPI.vue";
 import { isAuthenticated } from '../auth.js'
 import { getAuth } from "firebase/auth";
+
 const routes = [
   {
     path: '/',
