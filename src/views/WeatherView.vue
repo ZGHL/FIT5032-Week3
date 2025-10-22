@@ -90,7 +90,7 @@
 <template>
 <div class="container">
   <div class="header">
-    <h1>Weather APP</h1>
+    <h1>Weather APP test1</h1>
     <div class="search-bar">
       <input
       type="text"
